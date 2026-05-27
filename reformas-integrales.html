@@ -167,6 +167,93 @@
       from { transform: scale(1.06); }
       to   { transform: scale(1.0); }
     }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(24px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    @keyframes floatY {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    @keyframes pulseGold {
+      0%,100% { box-shadow: 0 0 0 0 rgba(184,154,111,.55); }
+      50%      { box-shadow: 0 0 0 10px rgba(184,154,111,0); }
+    }
+    @keyframes goldLine {
+      from { width: 0; }
+      to   { width: 48px; }
+    }
+    @keyframes scaleIn {
+      from { opacity:0; transform: scale(.92); }
+      to   { opacity:1; transform: scale(1); }
+    }
+    @keyframes borderGlow {
+      0%,100% { border-color: rgba(184,154,111,.3); }
+      50%      { border-color: rgba(184,154,111,.9); }
+    }
+
+    /* ── SHIMMER on label-tag ── */
+    .label-tag {
+      background: linear-gradient(90deg, var(--gold) 0%, #e2c99a 40%, var(--gold) 60%, var(--gold-dk) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3.5s linear infinite;
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: .75rem;
+    }
+    /* Override for dark contexts */
+    .porque-header .label-tag,
+    .faq .label-tag { -webkit-text-fill-color: unset; background: none; color: var(--gold); animation: none; }
+
+    /* ── GOLD UNDERLINE on section titles ── */
+    .section-title {
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-top: .55rem;
+      transition: width .7s ease .3s;
+    }
+    .visible .section-title::after,
+    .section-title.line-visible::after { width: 48px; }
+
+    /* ── FLOAT on hero scroll arrow ── */
+    .hero-scroll { animation: floatY 2.2s ease-in-out infinite; }
+
+    /* ── PULSE on CTA button ── */
+    .btn-gold { animation: pulseGold 2.8s ease infinite; }
+    .btn-gold:hover { animation: none; }
+
+    /* ── SCALE-IN for porq-cards (via JS stagger) ── */
+    .porq-card.card-hidden { opacity:0; transform: scale(.92) translateY(20px); }
+    .porq-card.card-visible {
+      opacity:1; transform: scale(1) translateY(0);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+
+    /* ── TIPO IMAGE parallax effect ── */
+    .tipo-img { overflow: hidden; }
+    .tipo-img img { will-change: transform; transition: transform .6s ease; }
+    .tipo-img:hover img { transform: scale(1.06); }
+
+    /* ── GLOW border on FAQ open ── */
+    .faq-item.open { animation: borderGlow 2s ease infinite; }
     .hero-overlay {
       position: absolute;
       inset: 0;
@@ -888,24 +975,113 @@
     .wa-fab:hover { transform: scale(1.1); box-shadow: 0 8px 28px rgba(37,211,102,.55); }
     .wa-fab svg { width: 30px; height: 30px; fill: #fff; }
 
+    /* ── HAMBURGER ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: .4rem;
+      z-index: 201;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform .35s, opacity .35s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--navy);
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: .04em;
+      transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu .btn-gold { font-size: 1rem; margin-top: 1rem; }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), #d4b896);
+      z-index: 300;
+      transition: width .1s linear;
+    }
+
     /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+    }
     @media (max-width: 960px) {
-      .que-es-grid, .cuando-grid, .contacto-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .contacto-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .steps-grid { grid-template-columns: repeat(2,1fr); }
       .steps-grid::before { display: none; }
-      .incluye-grid { grid-template-columns: repeat(2,1fr); }
       .porque-grid { grid-template-columns: repeat(2,1fr); }
     }
-    @media (max-width: 600px) {
-      .incluye-grid, .porque-grid, .stats-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .form-row { grid-template-columns: 1fr; }
+    @media (max-width: 700px) {
       section { padding: 3.5rem 5%; }
+      .section-title { font-size: clamp(1.4rem, 5vw, 2rem); }
+      .section-sub { font-size: .9rem; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .porque-grid { grid-template-columns: 1fr; }
+      .tipo-grid, .tipo-grid.reverse { grid-template-columns: 1fr; gap: 2rem; direction: ltr; }
+      .tipo-includes { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-content h1 { font-size: clamp(1.6rem, 7vw, 2.6rem); }
+      .hero-content p { font-size: .95rem; }
+      .maps-wrap iframe { height: 260px; }
+      .container { padding: 0 1.25rem; }
+      .porque-header { margin-bottom: 2rem; }
+    }
+    @media (max-width: 480px) {
+      .tipo-includes { grid-template-columns: 1fr; }
+      .hero-badges { gap: .4rem; }
+      .hero-badge { font-size: .68rem; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .btn-gold, .btn-outline-w { width: 100%; text-align: center; }
+      .faq-q { font-size: .83rem; }
+      .wa-fab { bottom: 1.25rem; right: 1.25rem; width: 52px; height: 52px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/empresa" onclick="closeMobileMenu()">Empresa</a>
+    <a href="/servicios" onclick="closeMobileMenu()">Servicios</a>
+    <a href="/proyectos" onclick="closeMobileMenu()">Proyectos</a>
+    <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
+    <a href="tel:+34613281872" class="btn-gold" onclick="closeMobileMenu()">613 28 18 72</a>
+  </div>
 
   <!-- NAVBAR -->
   <nav id="navbar">
@@ -918,6 +1094,9 @@
       <li><a href="#contacto">Opiniones</a></li>
     </ul>
     <a href="#contacto" class="nav-cta">Contacto</a>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- HERO -->
@@ -1337,46 +1516,134 @@
   </a>
 
   <script>
-    /* ── NAVBAR SCROLL ── */
-    const nav = document.getElementById('navbar');
+    /* ── SCROLL PROGRESS BAR ── */
+    const progressBar = document.getElementById('scrollProgress');
     window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 70);
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      progressBar.style.width = pct + '%';
     }, { passive: true });
 
-    /* ── SCROLL REVEAL (Intersection Observer) ── */
-    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    /* ── NAVBAR ON SCROLL ── */
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    /* ── MOBILE MENU ── */
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const btn  = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      btn.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ── INTERSECTION OBSERVER: reveal + section-title underline ── */
     const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+          // animate gold underline on section titles inside revealed elements
+          el.target.querySelectorAll('.section-title').forEach(t => t.classList.add('line-visible'));
+          revealObserver.unobserve(el.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    revealEls.forEach(el => revealObserver.observe(el));
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObserver.observe(el));
+
+    /* Also observe section-title directly for sections without reveal wrapper */
+    const titleObserver = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('line-visible');
+          titleObserver.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.section-title').forEach(el => titleObserver.observe(el));
+
+    /* ── STAGGERED CARD ANIMATIONS (porq-cards) ── */
+    const cards = document.querySelectorAll('.porq-card');
+    cards.forEach(c => c.classList.add('card-hidden'));
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const allCards = [...document.querySelectorAll('.porq-card')];
+          allCards.forEach((card, i) => {
+            setTimeout(() => {
+              card.classList.remove('card-hidden');
+              card.classList.add('card-visible');
+            }, i * 100);
+          });
+          cardObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    if (cards[0]) cardObserver.observe(cards[0]);
+
+    /* ── PARALLAX on tipo images ── */
+    const tipoImgs = document.querySelectorAll('.tipo-img img');
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      tipoImgs.forEach(img => {
+        const rect = img.closest('.tipo-img').getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          const offset = (rect.top / window.innerHeight) * 18;
+          img.style.transform = `translateY(${offset}px) scale(1.06)`;
+        }
+      });
+    }, { passive: true });
 
     /* ── COUNTER ANIMATION ── */
-    const counters = document.querySelectorAll('.stat-num[data-target]');
+    const counters = document.querySelectorAll('[data-count]');
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const el = entry.target;
-        const target = +el.dataset.target;
-        const suffix = el.dataset.suffix || '';
-        const duration = 1800;
+        const target = parseInt(el.dataset.count);
+        const duration = 1600;
         const start = performance.now();
-        const update = (now) => {
-          const progress = Math.min((now - start) / duration, 1);
-          const ease = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.floor(ease * target) + suffix;
-          if (progress < 1) requestAnimationFrame(update);
-          else el.textContent = target + suffix;
-        };
-        requestAnimationFrame(update);
+        function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+        (function tick(now) {
+          const t = Math.min((now - start) / duration, 1);
+          el.textContent = Math.round(ease(t) * target);
+          if (t < 1) requestAnimationFrame(tick);
+          else el.textContent = target;
+        })(start);
         counterObserver.unobserve(el);
       });
     }, { threshold: 0.5 });
     counters.forEach(el => counterObserver.observe(el));
+
+    /* ── STEP SEQUENTIAL GLOW ── */
+    (function() {
+      const steps = document.querySelectorAll('.step');
+      let current = 0;
+      function activateStep(idx) {
+        steps.forEach((s, i) => {
+          const num = s.querySelector('.step-num');
+          s.classList.toggle('step-active-item', i === idx);
+          num.classList.toggle('step-active', i === idx);
+        });
+      }
+      const stepsSection = document.querySelector('.proceso');
+      if (!stepsSection) return;
+      const stepsObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          activateStep(current);
+          setInterval(() => { current = (current + 1) % steps.length; activateStep(current); }, 2000);
+          stepsObserver.unobserve(stepsSection);
+        }
+      }, { threshold: 0.3 });
+      stepsObserver.observe(stepsSection);
+    })();
 
     /* ── FAQ ACCORDION ── */
     function toggleFaq(btn) {
@@ -1386,40 +1653,18 @@
       if (!isOpen) item.classList.add('open');
     }
 
-    /* ── STEPS SEQUENTIAL GLOW ── */
-    (function() {
-      const steps = document.querySelectorAll('.step');
-      if (!steps.length) return;
-      let current = 0;
-
-      function activateStep(idx) {
-        steps.forEach((s, i) => {
-          const num = s.querySelector('.step-num');
-          if (i === idx) {
-            num.classList.add('step-active');
-            s.classList.add('step-active-item');
-          } else {
-            num.classList.remove('step-active');
-            s.classList.remove('step-active-item');
-          }
+    /* ── TIPO IMAGE hover tilt (desktop only) ── */
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.querySelectorAll('.tipo-img').forEach(img => {
+        img.addEventListener('mousemove', e => {
+          const r = img.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / r.width  - 0.5) * 8;
+          const y = ((e.clientY - r.top)  / r.height - 0.5) * 8;
+          img.style.transform = `perspective(800px) rotateY(${x}deg) rotateX(${-y}deg)`;
         });
-      }
-
-      // Start animation only when section is visible
-      const stepsSection = document.querySelector('.proceso');
-      const stepsObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          activateStep(current);
-          setInterval(() => {
-            current = (current + 1) % steps.length;
-            activateStep(current);
-          }, 2000);
-          stepsObserver.unobserve(stepsSection);
-        }
-      }, { threshold: 0.3 });
-
-      if (stepsSection) stepsObserver.observe(stepsSection);
-    })();
-  </script>
+        img.addEventListener('mouseleave', () => { img.style.transform = ''; });
+      });
+    }
+</script>
 </body>
 </html>
