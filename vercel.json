@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/reformas/reformas-integrales", "destination": "/reformas-integrales.html" },
+    { "source": "/", "destination": "/index.html" }
+  ]
+}
